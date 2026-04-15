@@ -26,7 +26,7 @@ To run Mahjong Web locally using Docker Compose:
 
 2. Start the application:
    ```bash
-   docker compose up -d
+   docker compose up --build -d
    ```
 
 3. Open your browser and navigate to `http://localhost:8080`.
