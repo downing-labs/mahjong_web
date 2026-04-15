@@ -14,188 +14,163 @@ import { SettingsComponent } from '../settings/settings.component';
 import { ChooseLayoutComponent } from '../choose-layout/choose-layout.component';
 import { TranslatePipe } from '@ngx-translate/core';
 import { BoardComponent } from '../board/board.component';
-import { TutorialComponent } from '../tutorial/tutorial.component';
 import { DurationPipe } from '../../pipes/duration.pipe';
 import { GameModeEasyPipe, GameModeStandardPipe } from '../../pipes/game-mode.pipe';
 
 interface DocumentExtended extends Document {
-	fullScreen: boolean;
-	fullscreen: boolean;
-	mozFullScreen: boolean;
-	webkitIsFullScreen: boolean;
-	mozFullscreenEnabled: boolean;
-	webkitFullscreenEnabled: boolean;
+        fullScreen: boolean;
+        fullscreen: boolean;
+        mozFullScreen: boolean;
+        webkitIsFullScreen: boolean;
+        mozFullscreenEnabled: boolean;
+        webkitFullscreenEnabled: boolean;
 
-	mozCancelFullScreen(): void;
+        mozCancelFullScreen(): void;
 
-	webkitExitFullscreen(): void;
+        webkitExitFullscreen(): void;
 }
 
 interface HTMLElementExtended extends HTMLElement {
-	webkitRequestFullscreen(): void;
+        webkitRequestFullscreen(): void;
 
-	mozRequestFullScreen(): void;
+        mozRequestFullScreen(): void;
 }
 
 function callFullscreenMethod(
-	target: Record<string, unknown>,
-	methods: ReadonlyArray<string>,
-	action: string
+        target: Record<string, unknown>,
+        methods: ReadonlyArray<string>,
+        action: string
 ): void {
-	for (const method of methods) {
-		if (typeof target[method] === 'function') {
-			try {
-				const result = (target[method] as () => unknown)();
-				if (result instanceof Promise) {
-					result.catch(error => {
-						log.warn(`Failed to ${action}:`, error);
-					});
-				}
-			} catch (error) {
-				log.warn(`Failed to ${action}:`, error);
-			}
-			return;
-		}
-	}
+        for (const method of methods) {
+                if (typeof target[method] === 'function') {
+                        try {
+                                const result = (target[method] as () => unknown)();
+                                if (result instanceof Promise) {
+                                        result.catch(error => {
+                                                log.warn(`Failed to ${action}:`, error);
+                                        });
+                                }
+                        } catch (error) {
+                                log.warn(`Failed to ${action}:`, error);
+                        }
+                        return;
+                }
+        }
 }
 
 @Component({
-	selector: 'app-game-component',
-	templateUrl: './game-component.component.html',
-	styleUrls: ['./game-component.component.scss'],
-	host: { '(document:keydown)': 'handleKeyDownEvent($event)' },
-	imports: [
-		BoardComponent, DurationPipe, GameModeStandardPipe, GameModeEasyPipe,
-		HelpComponent, TilesInfoComponent, SettingsComponent, ChooseLayoutComponent, TutorialComponent, TranslatePipe, DialogComponent
-	]
+        selector: 'app-game-component',
+        templateUrl: './game-component.component.html',
+        styleUrls: ['./game-component.component.scss'],
+        host: { '(document:keydown)': 'handleKeyDownEvent($event)' },
+        imports: [
+                BoardComponent, DurationPipe, GameModeStandardPipe, GameModeEasyPipe,
+                HelpComponent, TilesInfoComponent, SettingsComponent, ChooseLayoutComponent, TranslatePipe, DialogComponent
+        ]
 })
 export class GameComponent {
-	readonly info = viewChild.required<DialogComponent>('info');
-	readonly settings = viewChild.required<DialogComponent>('settings');
-	readonly help = viewChild.required<DialogComponent>('help');
-	readonly newgame = viewChild.required<DialogComponent>('newgame');
-	readonly tutorial = viewChild.required<DialogComponent>('tutorial');
-	app = inject(AppService);
-	game: Game;
-	fullScreenEnabled: boolean = true;
-	title: string = '';
-	private readonly injector = inject(Injector);
+        readonly info = viewChild.required<DialogComponent>('info');
+        readonly settings = viewChild.required<DialogComponent>('settings');
+        readonly help = viewChild.required<DialogComponent>('help');
+        readonly newgame = viewChild.required<DialogComponent>('newgame');
+        app = inject(AppService);
+        game: Game;
+        fullScreenEnabled: boolean = true;
+        title: string = '';
+        private readonly injector = inject(Injector);
 
-	constructor() {
-		this.game = this.app.game;
-		this.fullScreenEnabled = this.canFullscreen();
-		this.title = `${this.app.name} v${environment.version}`;
-	}
+        constructor() {
+                this.game = this.app.game;
+                this.fullScreenEnabled = this.canFullscreen();
+                this.title = `${this.app.name} v${environment.version}`;
+        }
 
-	showTutorial(): void {
-		this.tutorial().visible.set(true);
-	}
+        start() {
+                this.showNewGame();
+        }
 
-	completeTutorial(): void {
-		this.tutorial().visible.set(false);
-		this.app.settings.tutorialCompleted = true;
-		this.app.settings.save();
-		if (this.app.game.isIdle()) {
-			this.showNewGame();
-		}
-	}
+        showNewGame(): void {
+                this.newgame().visible.set(true);
+        }
 
-	start() {
-		if (this.app.settings.tutorialCompleted) {
-			this.showNewGame();
-		} else {
-			this.showTutorial();
-		}
-	}
+        handleKeyDownEventKey(key: string): boolean {
+                switch (key) {
+                        case 'h': {
+                                this.help().toggle();
+                                break;
+                        }
+                        case 'i': {
+                                this.info().toggle();
+                                break;
+                        }
+                        case 's': {
+                                this.settings().toggle();
+                                break;
+                        }
+                        case 't': {
+                                this.game.hint();
+                                break;
+                        }
+                        case 'm': {
+                                this.game.shuffle();
+                                break;
+                        }
+                        case 'g': {
+                                this.debugSolve().catch(error => log.error(error));
+                                break;
+                        }
+                        case 'u': {
+                                this.game.back();
+                                break;
+                        }
+                        case 'n': {
+                                this.game.pause();
+                                this.newgame().toggle();
+                                break;
+                        }
+                        case ' ': // space
+                        case 'space': // space
+                        case 'Space': // space
+                        case 'spacebar': // space
+                        case 'Spacebar': // space
+                        case 'p': {
+                                if (this.game.isRunning()) {
+                                        this.game.pause();
+                                } else if (this.game.isPaused()) {
+                                        this.game.resume();
+                                }
+                                break;
+                        }
+                        default: {
+                                return false;
+                        }
+                }
+                return true;
+        }
 
-	showNewGame(): void {
-		this.newgame().visible.set(true);
-	}
-
-	handleKeyDownEventKey(key: string): boolean {
-		switch (key) {
-			case 'h': {
-				this.help().toggle();
-				break;
-			}
-			case 'i': {
-				this.info().toggle();
-				break;
-			}
-			case 's': {
-				this.settings().toggle();
-				break;
-			}
-			case 't': {
-				this.game.hint();
-				break;
-			}
-			case 'm': {
-				this.game.shuffle();
-				break;
-			}
-			case 'g': {
-				this.debugSolve().catch(error => log.error(error));
-				break;
-			}
-			case 'u': {
-				this.game.back();
-				break;
-			}
-			case 'n': {
-				this.game.pause();
-				this.newgame().toggle();
-				break;
-			}
-			case ' ': // space
-			case 'space': // space
-			case 'Space': // space
-			case 'spacebar': // space
-			case 'Spacebar': // space
-			case 'p': {
-				if (this.game.isRunning()) {
-					this.game.pause();
-				} else if (this.game.isPaused()) {
-					this.game.resume();
-				}
-				break;
-			}
-			default: {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	handleKeyDownDialogExit(): boolean {
-		const tutorial = this.tutorial();
-		if (tutorial.visible()) {
-			this.completeTutorial();
-			return true;
-		}
-		const help = this.help();
-		if (help.visible()) {
-			help.toggle();
-			return true;
-		}
-		const newgame = this.newgame();
-		if (newgame.visible()) {
-			newgame.toggle();
-			return true;
-		}
-		const info = this.info();
-		if (info.visible()) {
-			info.toggle();
-			return true;
-		}
-		const settings = this.settings();
-		if (settings.visible()) {
-			settings.toggle();
-			return true;
-		}
-		return false;
-	}
-
+        handleKeyDownDialogExit(): boolean {
+                const help = this.help();
+                if (help.visible()) {
+                        help.toggle();
+                        return true;
+                }
+                const newgame = this.newgame();
+                if (newgame.visible()) {
+                        newgame.toggle();
+                        return true;
+                }
+                const info = this.info();
+                if (info.visible()) {
+                        info.toggle();
+                        return true;
+                }
+                const settings = this.settings();
+                if (settings.visible()) {
+                        settings.toggle();
+                        return true;
+                }
+                return false;
+        }
 	handleKeyDownEvent(event: KeyboardEvent): void {
 		if (event.key === 'Escape' && this.handleKeyDownDialogExit()) {
 			return;

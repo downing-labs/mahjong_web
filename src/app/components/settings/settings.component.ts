@@ -10,12 +10,10 @@ import { TilePreviewComponent } from '../tile-preview/tile-preview.component';
 import { generatePatternList } from '../../service/pattern.service';
 
 const SETTINGS_TABS = [
-	{ id: 'lang', name: 'LANG' },
-	{ id: 'stones', name: 'TILESET' },
-	{ id: 'theme', name: 'THEME' },
-	{ id: 'background', name: 'BACKGROUND' }
+        { id: 'stones', name: 'TILESET' },
+        { id: 'theme', name: 'THEME' },
+        { id: 'background', name: 'BACKGROUND' }
 ];
-
 @Component({
 	selector: 'app-settings',
 	templateUrl: './settings.component.html',

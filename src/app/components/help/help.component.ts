@@ -27,13 +27,11 @@ interface Stat {
 	imports: [TranslatePipe, DurationPipe]
 })
 export class HelpComponent implements OnInit {
-	readonly showTutorial = output();
-	stats: Stat = {
-		items: [],
-		winCount: 0,
-		loseCount: 0
-	};
-
+        stats: Stat = {
+                items: [],
+                winCount: 0,
+                loseCount: 0
+        };
 	private readonly layoutService = inject(LayoutService);
 	private readonly storage = inject(LocalstorageService);
 	private readonly translate = inject(TranslateService);
