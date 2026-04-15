@@ -7,6 +7,7 @@ import { log } from '../model/log';
 })
 export class LocalstorageService implements StorageProvider {
 	private readonly prefix = 'mah.';
+	private memoryStorage: Record<string, string> = {};
 
 	constructor() {
 		this.updateData();
@@ -45,29 +46,38 @@ export class LocalstorageService implements StorageProvider {
 	}
 
 	localStorageNotAvailable(): boolean {
-		return (typeof localStorage === 'undefined' || !localStorage);
+		try {
+			return (typeof localStorage === 'undefined' || !localStorage);
+		} catch {
+			return true;
+		}
 	}
 
 	getLastPlayed(): string | undefined {
 		try {
-			if (this.localStorageNotAvailable()) {
-				return undefined;
-			}
 			const key = `${this.prefix}last`;
+			if (this.localStorageNotAvailable()) {
+				return this.memoryStorage[key];
+			}
 			const result = localStorage.getItem(key);
 			return result ?? undefined;
 		} catch (error) {
 			log.warn('localStorage.getItem failed:', error);
-			return undefined;
+			return this.memoryStorage[`${this.prefix}last`];
 		}
 	}
 
 	storeLastPlayed(id: string): void {
-		if (this.localStorageNotAvailable()) {
-			return;
-		}
 		const key = `${this.prefix}last`;
 		try {
+			if (this.localStorageNotAvailable()) {
+				if (id) {
+					this.memoryStorage[key] = id;
+				} else {
+					delete this.memoryStorage[key];
+				}
+				return;
+			}
 			if (id) {
 				localStorage.setItem(key, id);
 			} else {
@@ -75,6 +85,11 @@ export class LocalstorageService implements StorageProvider {
 			}
 		} catch (error) {
 			log.warn('localStorage.setItem/removeItem failed:', error);
+			if (id) {
+				this.memoryStorage[key] = id;
+			} else {
+				delete this.memoryStorage[key];
+			}
 		}
 	}
 
@@ -99,12 +114,14 @@ export class LocalstorageService implements StorageProvider {
 	}
 
 	private get<T>(key: string): T | undefined {
-		if (this.localStorageNotAvailable()) {
-			return undefined;
-		}
 		const fullKey = `${this.prefix}${key}`;
+		let s: string | null = null;
 		try {
-			const s = localStorage.getItem(fullKey);
+			if (this.localStorageNotAvailable()) {
+				s = this.memoryStorage[fullKey];
+			} else {
+				s = localStorage.getItem(fullKey);
+			}
 			if (!s) {
 				return undefined;
 			}
@@ -112,32 +129,43 @@ export class LocalstorageService implements StorageProvider {
 		} catch (error) {
 			// Remove corrupted entry to prevent repeated parse errors
 			try {
-				localStorage.removeItem(fullKey);
+				if (!this.localStorageNotAvailable()) {
+					localStorage.removeItem(fullKey);
+				}
+				delete this.memoryStorage[fullKey];
 			} catch (removalError) {
-				log.warn('Failed to remove corrupted localStorage item:', fullKey, removalError);
+				log.warn('Failed to remove corrupted storage item:', fullKey, removalError);
 			}
-			log.warn('Failed to parse localStorage item:', fullKey, error);
+			log.warn('Failed to parse storage item:', fullKey, error);
 			return undefined;
 		}
 	}
 
 	private set<T>(key: string, data?: T): void {
-		if (this.localStorageNotAvailable()) {
-			return;
-		}
 		const fullKey = `${this.prefix}${key}`;
 		try {
 			if (data === undefined) {
-				localStorage.removeItem(fullKey);
+				if (!this.localStorageNotAvailable()) {
+					localStorage.removeItem(fullKey);
+				}
+				delete this.memoryStorage[fullKey];
 			} else {
-				localStorage.setItem(fullKey, JSON.stringify(data));
+				const s = JSON.stringify(data);
+				if (!this.localStorageNotAvailable()) {
+					localStorage.setItem(fullKey, s);
+				}
+				this.memoryStorage[fullKey] = s;
 			}
 		} catch (error) {
 			// Distinguish between quota errors and other errors
 			if (error instanceof Error && (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
 				log.warn('localStorage quota exceeded:', fullKey);
 			} else {
-				log.warn('Failed to write localStorage item:', fullKey, error);
+				log.warn('Failed to write storage item:', fullKey, error);
+			}
+			// Always fallback to memory on error
+			if (data !== undefined) {
+				this.memoryStorage[fullKey] = JSON.stringify(data);
 			}
 		}
 	}

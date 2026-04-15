@@ -87,8 +87,6 @@ export const ImageSets: Array<{ id: string; type: 'SVG' | 'PNG'; name: string; l
 
 export const ImageSetDefault = 'riichi-old';
 export const ThemeDefault = 'sage';
-export const LangAuto = 'auto';
-export const LangDefault = 'auto';
 
 export const TILES: Array<[string, string, string, string]> = [
 	['t_do1', 't_do1', 't_do1', 't_do1'],

@@ -1,8 +1,8 @@
-import { ImageSetDefault, LangDefault, ThemeDefault } from './consts';
+import { ImageSetDefault, ThemeDefault } from './consts';
 import type { SettingsStore, StorageProvider } from './types';
 
 export class Settings {
-	lang = LangDefault;
+	lang = 'en';
 	sounds = true;
 	tileset = ImageSetDefault;
 	music = false;
@@ -25,7 +25,7 @@ export class Settings {
 		try {
 			const store: SettingsStore | undefined = this.storageProvider.getSettings();
 			if (store) {
-				this.lang = store.lang ?? LangDefault;
+				this.lang = 'en'; // Force English
 				this.tileset = store.tileset ?? ImageSetDefault;
 				this.background = store.background ?? this.background;
 				this.theme = store.theme ?? ThemeDefault;
@@ -47,7 +47,7 @@ export class Settings {
 	save(): boolean {
 		try {
 			this.storageProvider.storeSettings({
-				lang: this.lang,
+				lang: 'en',
 				sounds: this.sounds,
 				music: this.music,
 				contrast: this.contrast,

@@ -3,7 +3,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { Game } from '../model/game';
 import { DEFAULT_LANGUAGE, LANGUAGES } from '../model/languages';
 import { Settings } from '../model/settings';
-import { LangAuto } from '../model/consts';
 import { LocalstorageService } from './localstorage.service';
 
 @Injectable({ providedIn: 'root' })
@@ -42,15 +41,7 @@ export class AppService implements OnDestroy {
 	}
 
 	setLang(): void {
-		const userLang =
-			(!this.settings.lang || this.settings.lang === LangAuto) ?
-				(navigator.language.split('-')[0] || DEFAULT_LANGUAGE).toLowerCase() : // use navigator lang if available
-				this.settings.lang;
-		if (Object.keys(LANGUAGES).includes(userLang)) {
-			this.translate.use(userLang);
-		} else {
-			this.translate.use(DEFAULT_LANGUAGE);
-		}
+		this.translate.use(DEFAULT_LANGUAGE);
 	}
 
 	toggleSound(): void {

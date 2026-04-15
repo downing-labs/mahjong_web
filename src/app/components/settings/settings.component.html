@@ -20,7 +20,7 @@
 						<label for="imageset{{i}}">
 							{{ imageset.name }}
 						</label>
-						<app-license-link link="https://github.com/ffalt/mah/blob/main/src/assets/svg/README.md#{{ imageset.id }}svg" [licenseKey]="imageset.license"></app-license-link>
+						<app-license-link link="https://github.com/downing-labs/mahjong_web/tree/main/src/assets/svg/README.md#{{ imageset.id }}" [licenseKey]="imageset.license"></app-license-link>
 					</li>
 				}
 				@if (canKyodai) {
@@ -147,11 +147,7 @@
 						/>
 						<label for="back{{i}}">{{ back.name | translate }}</label>
 						@if (back.license) {
-							@if (back.type === 'MAH') {
-								<app-license-link link="https://github.com/ffalt/mah/blob/main/src/assets/patterns/README.md" [licenseKey]="back.license"></app-license-link>
-							} @else {
-								<app-license-link link="https://github.com/ffalt/mah/blob/main/src/assets/img/README.md#{{ back.img }}jpg" [licenseKey]="back.license"></app-license-link>
-							}
+							<app-license-link link="https://github.com/downing-labs/mahjong_web/tree/main/src/assets/img/README.md#{{ back.img }}jpg" [licenseKey]="back.license"></app-license-link>
 						}
 					</li>
 				}

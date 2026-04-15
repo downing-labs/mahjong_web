@@ -10,16 +10,16 @@ RUN npm install
 
 # Copy source and build
 COPY . .
-RUN npm run build:deploy-root
+RUN npm run build
 
-# Stage 2: Serve with Nginx
-FROM nginx:alpine
+# Stage 2: Serve with Nginx (unprivileged)
+FROM nginxinc/nginx-unprivileged:alpine
 
 # Copy the build output to Nginx's default public folder
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
 
 # Copy custom Nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --chown=nginx:nginx nginx.conf /etc/nginx/conf.d/default.conf
 
-EXPOSE 80
+EXPOSE 8080
 CMD ["nginx", "-g", "daemon off;"]

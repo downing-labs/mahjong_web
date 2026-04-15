@@ -70,7 +70,15 @@ export class SettingsComponent implements AfterViewInit {
 	applyKyodaiUrl(): void {
 		const kyodaiInput = this.kyodaiInput();
 		if (kyodaiInput?.nativeElement) {
-			this.app.settings.kyodaiUrl = kyodaiInput.nativeElement.value;
+			const url = kyodaiInput.nativeElement.value.trim();
+			if (url && !url.startsWith('http://') && !url.startsWith('https://')) {
+				alert('Please enter a valid URL starting with http:// or https://');
+				return;
+			}
+			this.app.settings.kyodaiUrl = url || undefined;
+			if (!url) {
+				this.app.settings.tileset = ImageSetDefault;
+			}
 			this.app.settings.save();
 		}
 	}
