@@ -90,7 +90,6 @@ export class SettingsStore {
 	kyodaiUrl?: string;
 	theme: string;
 	background: string;
-	pattern?: string;
 	tile3d?: boolean;
 	tutorialCompleted?: boolean;
 }

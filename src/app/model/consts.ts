@@ -55,21 +55,16 @@ export const Themes: Array<{ id: string; name: string; colors: Array<string> }> 
 	{ id: 'white', name: 'THEME_PEARL', colors: ['#9e9e9e', '#d0d0d0', '#b5b5b5', '#a8a8a8', '#ffffff'] }
 ];
 
-export const PATTERN_BACKGROUND = 'pattern-monster';
-
 export type LICENCE = 'cca' | 'gpl' | 'free' | 'per' | 'pub' | 'mit';
 
 export const Backgrounds: Array<{ img: string; name: string; type?: 'jpg' | 'png' | 'svg' | 'MAH'; repeat?: boolean; license?: LICENCE }> = [
 	{ img: '', name: 'BACK_NONE' },
 	{ img: 'bamboo', name: 'BACK_BAMBOO', license: 'cca' },
 	{ img: 'blueclouds', name: 'BACK_BLUE_CLOUDS', license: 'cca' },
-	{ img: 'grayclouds', name: 'BACK_GRAY_CLOUDS', license: 'cca' },
 	{ img: 'grass-1', name: 'BACK_GRAY_GRASS', license: 'free' },
 	{ img: 'stones-1', name: 'BACK_GRAY_STONES', license: 'free' },
-	{ img: 'wood', name: 'BACK_GRAY_WOOD', license: 'free' },
 	{ img: 'wood-grain-1', name: 'BACK_GRAY_WOOD_GRAIN', license: 'free' },
-	{ img: 'space', name: 'BACK_SPACE', license: 'free' },
-	{ img: PATTERN_BACKGROUND, name: 'BACK_PATTERNS', type: 'MAH', repeat: true, license: 'mit' }
+	{ img: 'space', name: 'BACK_SPACE', license: 'free' }
 ];
 
 export const Licenses: Record<string, string> = {
@@ -82,13 +77,6 @@ export const Licenses: Record<string, string> = {
 };
 
 export const ImageSets: Array<{ id: string; type: 'SVG' | 'PNG'; name: string; license: LICENCE }> = [
-	{ id: 'riichi', type: 'SVG', name: 'Riichi 2', license: 'cca' },
-	{ id: 'picasso', type: 'PNG', name: 'Picasso', license: 'gpl' },
-	{ id: 'modern', type: 'PNG', name: 'Modern', license: 'gpl' },
-	{ id: 'animals', type: 'SVG', name: 'Animals', license: 'per' },
-	{ id: 'birds', type: 'SVG', name: 'Birds', license: 'cca' },
-	{ id: 'open-fruits', type: 'PNG', name: 'Fruits', license: 'free' },
-	{ id: 'space', type: 'SVG', name: 'Space', license: 'cca' },
 	{ id: 'riichi-old', type: 'SVG', name: 'Riichi', license: 'cca' },
 	{ id: 'uni', type: 'SVG', name: 'Uni', license: 'pub' },
 	{ id: 'cheshire137', type: 'SVG', name: 'Taksuyu', license: 'free' },
@@ -97,7 +85,7 @@ export const ImageSets: Array<{ id: string; type: 'SVG' | 'PNG'; name: string; l
 	{ id: 'classic', type: 'PNG', name: 'Classic', license: 'gpl' }
 ];
 
-export const ImageSetDefault = 'riichi';
+export const ImageSetDefault = 'riichi-old';
 export const ThemeDefault = 'sage';
 export const LangAuto = 'auto';
 export const LangDefault = 'auto';

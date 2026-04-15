@@ -157,22 +157,5 @@
 				}
 			</ul>
 		</fieldset>
-		@if (app.settings.background === PatternBackground) {
-			<fieldset class="pattern-settings">
-				<legend id="pattern-legend">{{ 'PATTERN_SETTINGS' | translate }}</legend>
-				<ul class="radio radio-patterns" role="group" aria-labelledby="pattern-legend">
-					@for (pattern of patterns; track pattern; let i = $index) {
-						<li>
-							<input type="radio" name="pattern" id="pattern{{i}}" [value]="pattern.id"
-										 [checked]="app.settings.pattern === pattern.id"
-										 (change)="app.settings.pattern = pattern.id;app.settings.save();"
-										 [attr.aria-label]="pattern.title"
-							/>
-							<label for="pattern{{i}}">{{ pattern.title }}</label>
-						</li>
-					}
-				</ul>
-			</fieldset>
-		}
 	</section>
 </div>

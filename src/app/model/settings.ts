@@ -10,7 +10,6 @@ export class Settings {
 	dark = false;
 	tile3d = false;
 	background = '';
-	pattern?: string;
 	kyodaiUrl?: string;
 	theme = ThemeDefault;
 	tutorialCompleted = false;
@@ -29,7 +28,6 @@ export class Settings {
 				this.lang = store.lang ?? LangDefault;
 				this.tileset = store.tileset ?? ImageSetDefault;
 				this.background = store.background ?? this.background;
-				this.pattern = store.pattern;
 				this.theme = store.theme ?? ThemeDefault;
 				this.contrast = store.contrast ?? false;
 				this.dark = store.dark ?? false;
@@ -56,7 +54,6 @@ export class Settings {
 				dark: this.dark,
 				tile3d: this.tile3d,
 				background: this.background,
-				pattern: this.pattern,
 				theme: this.theme,
 				tileset: this.tileset,
 				kyodaiUrl: this.kyodaiUrl,

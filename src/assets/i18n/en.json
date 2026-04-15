@@ -54,7 +54,7 @@
 	"INFO_LONG": "Tiles Information",
 	"HELP": "Help",
 	"HELP_LONG": "Show/hide this dialog",
-	"SETTINGS_LONG": "Adjust language, tile sets & colors",
+	"SETTINGS_LONG": "Tile sets & colors",
 	"MODE_SOLVABLE_DESC": "A random fill with at least one solving possibility",
 	"MODE_RANDOM_DESC": "A total random fill, maybe unsolvable",
 	"SELECT_BOARD": "Select Board",

@@ -1,13 +1,12 @@
 import { Component, ElementRef, inject, viewChild, type AfterViewInit } from '@angular/core';
 import { TranslatePipe } from '@ngx-translate/core';
-import { Backgrounds, ImageSetDefault, ImageSets, PATTERN_BACKGROUND, Themes } from '../../model/consts';
+import { Backgrounds, ImageSetDefault, ImageSets, Themes } from '../../model/consts';
 import { AppService } from '../../service/app.service';
 import { LANGUAGES } from '../../model/languages';
 import { KyodaiTileSets } from '../../model/tilesets';
 import { environment } from '../../../environments/environment';
 import { LicenseLinkComponent } from '../license-link/license-link.component';
 import { TilePreviewComponent } from '../tile-preview/tile-preview.component';
-import { generatePatternList } from '../../service/pattern.service';
 
 const SETTINGS_TABS = [
         { id: 'stones', name: 'TILESET' },
@@ -30,11 +29,9 @@ export class SettingsComponent implements AfterViewInit {
 	readonly sets = ImageSets;
 	readonly backs = Backgrounds;
 	readonly themes = Themes;
-	readonly PatternBackground = PATTERN_BACKGROUND;
 	readonly languages = Object.keys(LANGUAGES).map(key => ({ key, title: LANGUAGES[key] }));
 	readonly app = inject(AppService);
 	readonly tabs = SETTINGS_TABS;
-	readonly patterns = generatePatternList();
 	selectedTab: string = this.app.getCachedValue('settings.selectedTab') as string | undefined ?? SETTINGS_TABS[0].id;
 
 	private readonly element = inject(ElementRef);

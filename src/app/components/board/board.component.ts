@@ -9,7 +9,6 @@ import { Indicator } from '../../model/indicator';
 import { PanZoom } from '../../model/pan-zoom';
 import { PrefixPipe } from '../../pipes/prefix.pipe';
 import { TranslatePipe } from '@ngx-translate/core';
-import { PatternService } from '../../service/pattern.service';
 import { log } from '../../model/log';
 
 const defaultW = 1470;
@@ -40,7 +39,6 @@ export class BoardComponent implements OnInit, OnChanges {
 	readonly theme = input<string>();
 	readonly imageSet = input<string>();
 	readonly kyodaiUrl = input<string>();
-	readonly pattern = input<string>();
 	readonly stones = input<Array<Stone>>();
 	readonly noRotate = input(false);
 	readonly clickEvent = output<Stone | undefined>();
@@ -57,7 +55,6 @@ export class BoardComponent implements OnInit, OnChanges {
 	imagePos: Array<number> = [1, 1, 69, 88];
 	imageCut: Array<number> = [0, 0, 65, 90];
 	app = inject(AppService);
-	patternService = inject(PatternService);
 	element = inject(ElementRef);
 	panZoom = new PanZoom(
 		() => ({ width: this.element.nativeElement.offsetWidth || 0, height: this.element.nativeElement.offsetHeight || 0 }),
@@ -105,7 +102,7 @@ export class BoardComponent implements OnInit, OnChanges {
 		if (changes.background) {
 			this.updateBackground(changes.background.currentValue);
 		}
-		if (changes.theme || changes.pattern) {
+		if (changes.theme) {
 			const current = this.background();
 			if (current) {
 				this.updateBackground(current);
@@ -258,22 +255,6 @@ export class BoardComponent implements OnInit, OnChanges {
 		this.setTransformStage();
 	}
 
-	private cssBarColors(): Array<string> {
-		const theme = Themes.find(t => t.id === this.app.settings.theme) ?? Themes[0];
-		return theme.colors;
-	}
-
-	private updateMahBackground(pattern?: string): void {
-		this.backgroundUrl = '';
-		if (!pattern) {
-			return;
-		}
-		this.patternService
-			.svgDataUrl(pattern, this.cssBarColors())
-			.then(dataUrl => this.backgroundUrl = dataUrl)
-			.catch(error => log.error(error));
-	}
-
 	private updateBackground(background: string): void {
 		const bg = Backgrounds.find(b => b.img === background);
 		if (!bg) {
@@ -281,10 +262,7 @@ export class BoardComponent implements OnInit, OnChanges {
 			return;
 		}
 		this.backgroundRepeat = !!bg.repeat;
-		if (bg.type === 'MAH') {
-			this.updateMahBackground(this.pattern());
-			return;
-		}
 		this.backgroundUrl = `url("assets/img/${bg.img}.${(bg.type ?? 'jpg')}")`;
 	}
 }
+

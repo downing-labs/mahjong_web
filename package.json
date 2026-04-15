@@ -1,9 +1,9 @@
 {
-  "name": "mah",
-  "version": "1.18.3",
+  "name": "mahjong-web",
+  "version": "1.0.0",
   "author": "ffalt",
   "license": "MIT",
-  "description": "a html5 mahjong solitaire game",
+  "description": "Mahjong Web - Simple and Clean",
   "repository": "https://github.com/ffalt/mah.git",
   "scripts": {
     "ng": "ng",
