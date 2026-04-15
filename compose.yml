@@ -1,0 +1,7 @@
+services:
+  mahjong_web:
+    build: .
+    container_name: mahjong_web
+    ports:
+      - "8080:80"
+    restart: always
