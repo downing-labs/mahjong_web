@@ -29,32 +29,27 @@
 	<fieldset class="license">
 		<legend>{{ 'LICENSE' | translate }}</legend>
 		<div class="license-list">
-			<div>
-				<div class="name">{{ 'GAME' | translate }}</div>
-				<div class="info"><a (click)="clickExternalHref($event)" rel="noopener" target="_blank" href="https://github.com/ffalt/mah/blob/main/README.md">MIT</a></div>
-			</div>
-			<div>
-				<div class="name">{{ 'DESIGNS' | translate }}</div>
-				<div class="info"><a (click)="clickExternalHref($event)" rel="noopener" target="_blank" href="https://github.com/ffalt/mah/tree/main/src/assets/svg/README.md">Free | Public Domain | CCA4.0 | GNU</a></div>
-			</div>
-			<div>
-				<div class="name">{{ 'SOUNDS' | translate }}</div>
-				<div class="info"><a (click)="clickExternalHref($event)" rel="noopener" target="_blank" href="https://github.com/ffalt/mah/blob/main/src/assets/sounds/README.md">MIT</a></div>
-			</div>
-			<div>
-				<div class="name">{{ 'FONTS' | translate }}</div>
-				<div class="info"><a (click)="clickExternalHref($event)" rel="noopener" target="_blank" href="https://github.com/ffalt/mah/blob/main/src/fonts/README.md">SIL</a></div>
-			</div>
-			<div>
-				<div class="name">{{ 'BACKGROUNDS' | translate }}</div>
-				<div class="info"><a (click)="clickExternalHref($event)" rel="noopener" target="_blank" href="https://github.com/ffalt/mah/blob/main/src/assets/img/README.md">Public Domain</a></div>
-			</div>
-			<div>
-				<div class="name">{{ 'PATTERN_SETTINGS' | translate }}</div>
-				<div class="info"><a (click)="clickExternalHref($event)" rel="noopener" target="_blank" href="https://github.com/ffalt/mah/blob/main/src/assets/patterns/README.md">MIT</a></div>
-			</div>
-		</div>
-	</fieldset>
+		        <div>
+		                <div class="name">{{ 'GAME' | translate }}</div>
+		                <div class="info"><a (click)='clickExternalHref($event)' rel="noopener" target="_blank" href="https://github.com/downing-labs/mahjong_web/blob/main/README.md">MIT (Forked from ffalt/mah)</a></div>
+		        </div>
+		        <div>
+		                <div class="name">{{ 'DESIGNS' | translate }}</div>
+		                <div class="info"><a (click)='clickExternalHref($event)' rel="noopener" target="_blank" href="https://github.com/downing-labs/mahjong_web/tree/main/src/assets/svg/README.md">Free | Public Domain | CCA4.0 | GNU</a></div>
+		        </div>
+		        <div>
+		                <div class="name">{{ 'SOUNDS' | translate }}</div>
+		                <div class="info"><a (click)='clickExternalHref($event)' rel="noopener" target="_blank" href="https://github.com/downing-labs/mahjong_web/blob/main/src/assets/sounds/README.md">MIT</a></div>
+		        </div>
+		        <div>
+		                <div class="name">{{ 'FONTS' | translate }}</div>
+		                <div class="info"><a (click)='clickExternalHref($event)' rel="noopener" target="_blank" href="https://github.com/downing-labs/mahjong_web/blob/main/src/fonts/README.md">SIL</a></div>
+		        </div>
+		        <div>
+		                <div class="name">{{ 'BACKGROUNDS' | translate }}</div>
+		                <div class="info"><a (click)='clickExternalHref($event)' rel="noopener" target="_blank" href="https://github.com/downing-labs/mahjong_web/blob/main/src/assets/img/README.md">Public Domain</a></div>
+		        </div>
+		</div>	</fieldset>
 	<fieldset class="stats">
 		<legend>{{ 'STATS' | translate }}</legend>
 		@if (stats.items.length === 0) {
